@@ -13,7 +13,7 @@ if [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ]; then
   exit 0
 fi
 
-THRESHOLD="${1:-70}"
+THRESHOLD="${1:-80}"
 USAGE=$(df / --output=pcent | tail -1 | tr -dc '0-9')
 echo "Disk usage on /: ${USAGE}% (threshold ${THRESHOLD}%)"
 echo "Checked at $(date '+%Y-%m-%d %H:%M:%S')"
