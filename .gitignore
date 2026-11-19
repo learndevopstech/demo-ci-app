@@ -1,3 +1,4 @@
 logs/
 *.tar.gz
 gen_log.sh
+config.env
