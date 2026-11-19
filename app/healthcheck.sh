@@ -31,3 +31,4 @@ for URL in "${@:2}"; do
   fi
 done
 echo "OK"
+# added by teammate
