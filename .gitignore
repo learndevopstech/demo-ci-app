@@ -1,2 +1,3 @@
 logs/
 *.tar.gz
+gen_log.sh
