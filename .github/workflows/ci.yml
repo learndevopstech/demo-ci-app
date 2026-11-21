@@ -1,0 +1,22 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint
+        run: bash -n app/healthcheck.sh
+      - name: Test
+        run: bash tests/test_healthcheck.sh
+      - name: Health check
+        run: bash app/healthcheck.sh 100
+      - name: Package
+        run: tar -czf healthcheck.tar.gz app/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: healthcheck
+          path: healthcheck.tar.gz
