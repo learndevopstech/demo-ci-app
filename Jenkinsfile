@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  parameters {
+    string(name: 'THRESHOLD', defaultValue: '80', description: 'Disk usage percent that fails the health check')
+  }
   stages {
     stage('Lint') {
       steps {
@@ -9,6 +12,11 @@ pipeline {
     stage('Test') {
       steps {
         sh 'bash tests/test_healthcheck.sh'
+      }
+    }
+    stage('Health check') {
+      steps {
+        sh "bash app/healthcheck.sh ${params.THRESHOLD}"
       }
     }
     stage('Package') {
