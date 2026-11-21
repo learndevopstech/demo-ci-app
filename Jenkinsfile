@@ -13,7 +13,7 @@ pipeline {
     }
     stage('Package') {
       steps {
-        sh 'tar -czf healthcheck.tar.gz app/'
+        sh 'tar -czf healthcheck.tar.gz appp/'
         archiveArtifacts artifacts: 'healthcheck.tar.gz', fingerprint: true
       }
     }
