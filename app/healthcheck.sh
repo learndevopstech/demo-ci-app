@@ -17,7 +17,7 @@ THRESHOLD="${1:-80}"
 USAGE=$(df / --output=pcent | tail -1 | tr -dc '0-9')
 echo "Disk usage on /: ${USAGE}% (threshold ${THRESHOLD}%)"
 echo "Checked at $(date '+%Y-%m-%d %H:%M:%S')"
-if [ "$USAGE" -lt "$THRESHOLD" ]; then
+if [ "$USAGE" -ge "$THRESHOLD" ]; then
   echo "FAIL: disk usage above threshold"
   exit 1
 fi
