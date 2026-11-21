@@ -32,3 +32,4 @@ for URL in "${@:2}"; do
 done
 echo "OK"
 # added by teammate
+# added by mari for jenkins run
