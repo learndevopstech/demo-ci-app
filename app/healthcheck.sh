@@ -20,7 +20,7 @@ echo "Checked at $(date '+%Y-%m-%d %H:%M:%S')"
 if [ "$USAGE" -ge "$THRESHOLD" ]; then
   echo "FAIL: disk usage above threshold"
   exit 1
-
+fi
 
 for URL in "${@:2}"; do
   if curl -sf -o /dev/null --max-time 5 "$URL"; then
