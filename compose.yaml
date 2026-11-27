@@ -1,0 +1,26 @@
+services:
+  web:
+    image: nginx:1.27-alpine
+    ports:
+      - "8081:80"
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  checker:
+    build: .
+    image: demo-ci-app:compose
+    command: ["${THRESHOLD:-100}", "http://web"]
+    depends_on:
+      web:
+        condition: service_healthy
+
+  tests:
+    build: .
+    image: demo-ci-app:compose
+    entrypoint: ["bash", "tests/test_healthcheck.sh"]
+    profiles: ["test"]
