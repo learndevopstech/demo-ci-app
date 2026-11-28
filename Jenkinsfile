@@ -31,13 +31,14 @@ pipeline {
     }
     stage('Docker Build') {
       steps {
+        sh 'docker build --target test -t $IMAGE:test .'
         sh 'docker build -t $IMAGE:$TAG -t $IMAGE:latest .'
       }
     }
     stage('Docker Test') {
       steps {
-        sh 'docker run --rm --entrypoint bash $IMAGE:$TAG tests/test_healthcheck.sh'
         sh 'docker run --rm $IMAGE:$TAG 100'
+        sh 'test "$(docker run --rm --entrypoint id $IMAGE:$TAG -u)" != "0"'
       }
     }
     stage('Docker Push') {
@@ -56,7 +57,7 @@ pipeline {
   post {
     always {
       sh 'docker logout || true'
-      sh 'docker rmi $IMAGE:$TAG || true'
+      sh 'docker rmi $IMAGE:$TAG $IMAGE:test || true'
       sh 'docker image prune -f'
       echo "Build finished: ${currentBuild.currentResult}"
     }
