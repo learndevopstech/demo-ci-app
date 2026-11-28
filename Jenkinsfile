@@ -56,6 +56,8 @@ pipeline {
   post {
     always {
       sh 'docker logout || true'
+      sh 'docker rmi $IMAGE:$TAG || true'
+      sh 'docker image prune -f'
       echo "Build finished: ${currentBuild.currentResult}"
     }
   }
