@@ -40,9 +40,22 @@ pipeline {
         sh 'docker run --rm $IMAGE:$TAG 100'
       }
     }
+    stage('Docker Push') {
+      when { branch 'main' }
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
+                                          usernameVariable: 'DH_USER',
+                                          passwordVariable: 'DH_PASS')]) {
+          sh 'echo "$DH_PASS" | docker login -u "$DH_USER" --password-stdin'
+          sh 'docker push $IMAGE:$TAG'
+          sh 'docker push $IMAGE:latest'
+        }
+      }
+    }
   }
   post {
     always {
+      sh 'docker logout || true'
       echo "Build finished: ${currentBuild.currentResult}"
     }
   }
