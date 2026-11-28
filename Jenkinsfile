@@ -3,6 +3,10 @@ pipeline {
   parameters {
     string(name: 'THRESHOLD', defaultValue: '80', description: 'Disk usage percent that fails the health check')
   }
+  environment {
+    IMAGE = 'learndevopstech/demo-ci-app'
+    TAG   = "${env.BUILD_NUMBER}"
+  }
   stages {
     stage('Lint') {
       steps {
@@ -23,6 +27,17 @@ pipeline {
       steps {
         sh 'tar -czf healthcheck.tar.gz app/'
         archiveArtifacts artifacts: 'healthcheck.tar.gz', fingerprint: true
+      }
+    }
+    stage('Docker Build') {
+      steps {
+        sh 'docker build -t $IMAGE:$TAG -t $IMAGE:latest .'
+      }
+    }
+    stage('Docker Test') {
+      steps {
+        sh 'docker run --rm --entrypoint bash $IMAGE:$TAG tests/test_healthcheck.sh'
+        sh 'docker run --rm $IMAGE:$TAG 100'
       }
     }
   }
