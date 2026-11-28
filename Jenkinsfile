@@ -1,5 +1,6 @@
 pipeline {
   agent any
+  options { disableConcurrentBuilds() }
   parameters {
     string(name: 'THRESHOLD', defaultValue: '80', description: 'Disk usage percent that fails the health check')
   }
